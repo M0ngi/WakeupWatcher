@@ -10,7 +10,7 @@ int main()
 {
 	Config config("WakeupWatcher.cfg");
 
-	Client Bot(config.TOKEN);
+	Client Bot(&config);
 	Bot.hello();
 }
 

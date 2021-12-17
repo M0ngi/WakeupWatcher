@@ -1,16 +1,20 @@
 #include <string>
+#include "Config.h"
 
 #pragma once
 
-using std::string;
+using std::wstring;
 
 class Client
 {
 private:
-    string token;
+    Config* cfg;
+    bool ready = false;
+
+    void getAPI(wstring);
 
 public:
-    Client(string token);
+    Client(Config*);
     void hello();
     // ~client();
 };

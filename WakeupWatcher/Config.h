@@ -1,21 +1,22 @@
 #include <string>
 
+using std::wstring;
 using std::string;
 
 #pragma once
 class Config
 {
 public:
-	string TOKEN;
-	string PIC_DIR;
-	string SAFE_FILE;
-	string KEYWORD;
+	wstring TOKEN;
+	wstring PIC_DIR;
+	wstring SAFE_FILE;
+	wstring KEYWORD;
 	int DESKTOP_FREQ;
 	int COUNTDOWN;
-	string ERR_CHANN;
-	string TXT_CHANN;
-	string IMG_CHANN;
-	string LOG_CHANN;
+	wstring ERR_CHANN;
+	wstring TXT_CHANN;
+	wstring IMG_CHANN;
+	wstring LOG_CHANN;
 
 	Config(string);
 };

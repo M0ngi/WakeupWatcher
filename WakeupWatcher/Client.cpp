@@ -1,13 +1,15 @@
 #include "Client.h"
 #include <string>
 #include <iostream>
+#include "Config.h"
 
 using std::string;
 
-Client::Client(string token)
+Client::Client(Config* cfg)
 {
-    this->token = token;
+    this->cfg = cfg;
 
+    getAPI(L"channels/" + cfg->IMG_CHANN);
 }
 
 void Client::hello() {
