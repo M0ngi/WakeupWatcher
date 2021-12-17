@@ -3,10 +3,14 @@
 
 #include <iostream>
 #include "Client.h"
+#include <string>
+#include "Config.h"
 
 int main()
 {
-	Client Bot("");
+	Config config("WakeupWatcher.cfg");
+
+	Client Bot(config.TOKEN);
 	Bot.hello();
 }
 
