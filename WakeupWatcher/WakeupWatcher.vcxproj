@@ -150,15 +150,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Channel.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="APIHandler.cpp" />
+    <ClCompile Include="Message.cpp" />
+    <ClCompile Include="Response.cpp" />
+    <ClCompile Include="utils.cpp" />
     <ClCompile Include="WakeupWatcher.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Channel.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Config.h" />
+    <ClInclude Include="Message.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Response.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WakeupWatcher.rc" />

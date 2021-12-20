@@ -11,8 +11,8 @@ public:
 	wstring PIC_DIR;
 	wstring SAFE_FILE;
 	wstring KEYWORD;
-	int DESKTOP_FREQ;
-	int COUNTDOWN;
+	int DESKTOP_FREQ = 0;
+	int COUNTDOWN = 0;
 	wstring ERR_CHANN;
 	wstring TXT_CHANN;
 	wstring IMG_CHANN;

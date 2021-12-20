@@ -6,21 +6,46 @@
 #include <string>
 #include "Config.h"
 
+#include "windows.h"
+#include "vfw.h"
+#include <cstdio>
+#include <locale>
+
+#pragma comment(lib, "Vfw32.lib")
+
+void takeCamPicture(const Config& cfg) {
+    // create the preview window 
+    HWND hCam = capCreateCaptureWindow(
+        L"Watcher",
+        WS_CHILD,
+        0, 0, 0, 0,
+        ::GetDesktopWindow(), 0);
+
+    if (capDriverConnect(hCam, 0))
+    {
+        capFileSaveDIB(hCam, L"shot.bmp");
+    }
+    else
+    {
+
+        printf("Check camera?");
+
+    }
+    DestroyWindow(hCam);
+
+}
+
 int main()
 {
 	Config config("WakeupWatcher.cfg");
 
+    takeCamPicture(config);
+
+    
 	Client Bot(&config);
-	Bot.hello();
+
+	Channel c = Bot.getChannel("log");
+    c.sendImage("shot");
+
+	//std::cout << c.sendMessage("test").response_code;
 }
-
-// Exécuter le programme : Ctrl+F5 ou menu Déboguer > Exécuter sans débogage
-// Déboguer le programme : F5 ou menu Déboguer > Démarrer le débogage
-
-// Astuces pour bien démarrer : 
-//   1. Utilisez la fenêtre Explorateur de solutions pour ajouter des fichiers et les gérer.
-//   2. Utilisez la fenêtre Team Explorer pour vous connecter au contrôle de code source.
-//   3. Utilisez la fenêtre Sortie pour voir la sortie de la génération et d'autres messages.
-//   4. Utilisez la fenêtre Liste d'erreurs pour voir les erreurs.
-//   5. Accédez à Projet > Ajouter un nouvel élément pour créer des fichiers de code, ou à Projet > Ajouter un élément existant pour ajouter des fichiers de code existants au projet.
-//   6. Pour rouvrir ce projet plus tard, accédez à Fichier > Ouvrir > Projet et sélectionnez le fichier .sln.

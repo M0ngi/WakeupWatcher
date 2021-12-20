@@ -1,20 +1,29 @@
-#include <string>
-#include "Config.h"
-
 #pragma once
 
+#include <string>
+#include "Config.h"
+#include <cpprest/json.h>
+#include "Response.h"
+#include "Channel.h"
+#include "Message.h"
+
 using std::wstring;
+using std::string;
 
 class Client
 {
-private:
-    Config* cfg;
-    bool ready = false;
+    private:
+        bool ready = false;
+    public:
+        Config* cfg;
 
-    void getAPI(wstring);
+        Response getAPI(wstring);
+        Response postAPI(wstring, web::json::value);
+        Response postImageAPI(wstring, string, string);
 
-public:
-    Client(Config*);
-    void hello();
-    // ~client();
+        Channel getChannel(string);
+        Channel getChannelByID(string);
+
+        Client(Config*);
 };
+
