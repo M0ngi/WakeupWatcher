@@ -166,6 +166,7 @@
     <ClInclude Include="Message.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Response.h" />
+    <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WakeupWatcher.rc" />

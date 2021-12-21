@@ -1,16 +1,22 @@
+#include "utils.h"
 #include <string>
 #include <atlstr.h>
 #include <gdiplus.h>
 #include <windows.h>
 #include <fstream>
+#include "vfw.h"
+#include "Config.h"
+#include <chrono>
+#include <wininet.h>
 
+#pragma comment(lib,"Wininet.lib")
 #pragma comment(lib, "cpprest141_2_10.lib")
 #pragma comment (lib,"Gdiplus.lib")
+#pragma comment(lib, "Vfw32.lib")
 
-using std::wstring;
 using namespace Gdiplus;
 
-inline int GetEncoderClsid(const WCHAR* format, CLSID* pClsid)
+int GetEncoderClsid(const WCHAR* format, CLSID* pClsid)
 {
 	UINT  num = 0;          // number of image encoders
 	UINT  size = 0;         // size of the image encoder array in bytes
@@ -41,7 +47,7 @@ inline int GetEncoderClsid(const WCHAR* format, CLSID* pClsid)
 	return -1;  // Failure
 }
 
-inline std::string readFileContent(std::string fName) {
+std::string readFileContent(std::string fName) {
 	// Converts the file to PNG then read it's content
 	// Camera results in BMP file always so we could convert the file directly without checking
 	// Unless this changes in the future
@@ -53,16 +59,51 @@ inline std::string readFileContent(std::string fName) {
 
 	CLSID encoderClsid;
 	Gdiplus::Status  stat;
-	Gdiplus::Image* image = new Gdiplus::Image((wstring(fName.begin(), fName.end()) + L".bmp").c_str());
+	Gdiplus::Image* image = new Gdiplus::Image((std::wstring(fName.begin(), fName.end()) + L".bmp").c_str());
 
 	// Get the CLSID of the PNG encoder.
 	GetEncoderClsid(L"image/png", &encoderClsid);
 
-	stat = image->Save((wstring(fName.begin(), fName.end()) + L".png").c_str(), &encoderClsid, NULL);
+	stat = image->Save((std::wstring(fName.begin(), fName.end()) + L".png").c_str(), &encoderClsid, NULL);
 
 	std::ifstream file(fName + ".png", std::ios::in | std::ios::binary);
 	std::string str = std::string((std::istreambuf_iterator<char>(file)),
 		(std::istreambuf_iterator<char>()));
 	file.close();
 	return str;
+}
+
+bool takeCamPicture(std::string file) {
+	// create the preview window 
+	HWND hCam = capCreateCaptureWindow(
+		L"Watcher",
+		WS_CHILD,
+		0, 0, 0, 0,
+		::GetDesktopWindow(), 0);
+
+	if (capDriverConnect(hCam, 0))
+	{
+		capFileSaveDIB(hCam, file.c_str());
+		DestroyWindow(hCam);
+		return true;
+	}
+	DestroyWindow(hCam);
+	return false;
+}
+
+long long getTimestamp() {
+	const auto p1 = std::chrono::system_clock::now();
+
+	return std::chrono::duration_cast<std::chrono::seconds>(
+			p1.time_since_epoch()).count();
+}
+
+bool isConnected() {
+	return InternetCheckConnection(L"http://google.com", FLAG_ICC_FORCE_CONNECTION, 0);
+}
+
+void waitForNetAccess() {
+	while (!isConnected()) {
+		Sleep(1000);
+	}
 }

@@ -2,50 +2,44 @@
 //
 
 #include <iostream>
-#include "Client.h"
 #include <string>
+#include <fstream>
+#include <Windows.h>
 #include "Config.h"
+#include "utils.h"
+#include "Client.h"
 
-#include "windows.h"
-#include "vfw.h"
-#include <cstdio>
-#include <locale>
+bool waitForSafetyFile(const Config& cfg) {
+	std::fstream safe(cfg.SAFE_FILE, std::ios::out);
+	safe.write("", 0);
+	safe.close();
+	
+	Sleep(cfg.COUNTDOWN * 1000);
 
-#pragma comment(lib, "Vfw32.lib")
+	safe.open(cfg.SAFE_FILE, std::ios::in);
+	std::string content = std::string((std::istreambuf_iterator<char>(safe)),
+		(std::istreambuf_iterator<char>()));
+	safe.close();
 
-void takeCamPicture(const Config& cfg) {
-    // create the preview window 
-    HWND hCam = capCreateCaptureWindow(
-        L"Watcher",
-        WS_CHILD,
-        0, 0, 0, 0,
-        ::GetDesktopWindow(), 0);
-
-    if (capDriverConnect(hCam, 0))
-    {
-        capFileSaveDIB(hCam, L"shot.bmp");
-    }
-    else
-    {
-
-        printf("Check camera?");
-
-    }
-    DestroyWindow(hCam);
-
+	return std::wstring(content.begin(), content.end()) != cfg.KEYWORD;
 }
 
 int main()
 {
 	Config config("WakeupWatcher.cfg");
-
-    takeCamPicture(config);
-
-    
 	Client Bot(&config);
+    //takeCamPicture(config);
 
-	Channel c = Bot.getChannel("log");
-    c.sendImage("shot");
+	if (waitForSafetyFile(config)) {
+		waitForNetAccess();
+
+
+	}
+    
+	
+
+	//Channel c = Bot.getChannel("log");
+    //c.sendImage("shot");
 
 	//std::cout << c.sendMessage("test").response_code;
 }

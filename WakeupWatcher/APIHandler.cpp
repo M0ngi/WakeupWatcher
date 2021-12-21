@@ -6,9 +6,8 @@
 #include <cpprest/uri.h>
 #include <cpprest/json.h>
 #include <atlstr.h>
-#include "Response.h"
 #include <locale>
-#include "utils.cpp"
+#include "utils.h"
 
 #pragma comment(lib, "cpprest141_2_10.lib")
 
@@ -16,9 +15,8 @@ using namespace utility;
 using namespace web;
 using namespace web::http;
 using namespace web::http::client;
-using std::wstring;
 
-Response Client::getAPI(wstring path) {
+Response Client::getAPI(std::wstring path) {
 	http_client client(L"https://discord.com/api/v9/"+ path);
 	http_request req(methods::GET);
 	req.headers().add(L"Authorization", (L"Bot "+cfg->TOKEN).c_str());
@@ -32,7 +30,7 @@ Response Client::getAPI(wstring path) {
 	return r;
 }
 
-Response Client::postAPI(wstring path, json::value data) {
+Response Client::postAPI(std::wstring path, json::value data) {
 	http_client client(L"https://discord.com/api/v9/" + path);
 	http_request req(methods::POST);
 	req.headers().add(L"Authorization", (L"Bot " + cfg->TOKEN).c_str());
@@ -48,7 +46,7 @@ Response Client::postAPI(wstring path, json::value data) {
 	return r;
 }
 
-Response Client::postImageAPI(wstring path, string msg, string fName) {
+Response Client::postImageAPI(std::wstring path, std::string msg, std::string fName) {
 	std::wstring_convert< std::codecvt<wchar_t, char, std::mbstate_t> > conv;
 
 	http_client client(L"https://discord.com/api/v9/" + path);
@@ -61,24 +59,25 @@ Response Client::postImageAPI(wstring path, string msg, string fName) {
 	std::string boundary = "KabezOfFireDegelDegelGoGoniDaijobo";
 	std::stringstream bodyContent;
 
+	// JSON Payload
 	bodyContent << "--" << boundary << "\r\n"
 		<< "Content-Disposition: form-data; name=\"payload_json\"\r\n"
 		<< "Content-Type: application/json\r\n\r\n"
 		<< utility::conversions::to_utf8string(obj.serialize()) << "\r\n";
 
-
+	// Image content
 	bodyContent << "--" << boundary << "\r\n"
 		<< "Content-Disposition: form-data; name=\"files[0]\"; filename=\"file.jpg\"\r\n"
 		<< "Content-Type: image/jpg\r\n\r\n"
 		<< readFileContent(fName) << "\r\n\r\n";
 
+	// End of body
 	bodyContent << "--" << boundary << "--";
 
 	req.set_body(bodyContent.str(), "multipart/form-data; boundary=" + boundary);
 	http_response response = client.request(req).get();
 
 	auto body = response.extract_string().get();
-
 	Response r(response.status_code(), json::value::parse(body), this);
 	return r;
 }

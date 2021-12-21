@@ -1,11 +1,10 @@
 #pragma once
-
 #include <string>
-#include "Config.h"
 #include <cpprest/json.h>
 #include "Response.h"
 #include "Channel.h"
 #include "Message.h"
+#include "Config.h"
 
 using std::wstring;
 using std::string;
@@ -25,5 +24,7 @@ class Client
         Channel getChannelByID(string);
 
         Client(Config*);
+
+        int checkChannels();
 };
 

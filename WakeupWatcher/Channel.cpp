@@ -2,9 +2,6 @@
 #include <string>
 #include <locale>
 #include "Client.h"
-#include "Message.h"
-#include "Response.h"
-#include <fstream>
 
 Channel::Channel(int c, web::json::value resp, Client* source, wstring c_id) : Response(c, resp, source) {
     id = c_id;

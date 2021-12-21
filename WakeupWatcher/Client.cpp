@@ -1,9 +1,8 @@
 #include "Client.h"
 #include <string>
 #include <iostream>
-#include "Config.h"
 #include <locale>
-#include "Channel.h"
+#include <cpprest/http_client.h> // For exceptions
 
 using std::string;
 using std::wstring;
@@ -11,21 +10,6 @@ using std::wstring;
 Client::Client(Config* cfg)
 {
     this->cfg = cfg;
-
-    if (getAPI(L"channels/" + cfg->IMG_CHANN).response_code != 200) {
-        std::cout << "Error: IMG Channel\n";
-    }
-    if (getAPI(L"channels/" + cfg->LOG_CHANN).response_code != 200) {
-        std::cout << "Error: LOG Channel\n";
-    }
-    if (getAPI(L"channels/" + cfg->TXT_CHANN).response_code != 200) {
-        std::cout << "Error: TXT Channel\n";
-    }
-    if (getAPI(L"channels/" + cfg->ERR_CHANN).response_code != 200) {
-        std::cout << "Error: ERR Channel\n";
-    }
-
-    std::cout << "Init success\n";
 }
 
 
@@ -55,4 +39,29 @@ Channel Client::getChannel(string name) {
     }
 }
 
+int Client::checkChannels() {
+    try {
+        if (getAPI(L"channels/" + cfg->IMG_CHANN).response_code != 200) {
+            std::cout << "Error: IMG Channel\n";
+            return 0;
+        }
+        if (getAPI(L"channels/" + cfg->LOG_CHANN).response_code != 200) {
+            std::cout << "Error: LOG Channel\n";
+            return 0;
+        }
+        if (getAPI(L"channels/" + cfg->TXT_CHANN).response_code != 200) {
+            std::cout << "Error: TXT Channel\n";
+            return 0;
+        }
+        if (getAPI(L"channels/" + cfg->ERR_CHANN).response_code != 200) {
+            std::cout << "Error: ERR Channel\n";
+            return 0;
+        }
+    }
+    catch (web::http::http_exception) {
+        return -1;
+    }
 
+    std::cout << "Init success\n";
+    return 1;
+}
