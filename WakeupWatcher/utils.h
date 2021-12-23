@@ -15,7 +15,7 @@ std::string readFileContent(std::string fName);
 
 bool takeCamPicture(std::string file);
 
-long long getTimestamp();
+std::string getTimestamp();
 
 bool isConnected();
 

@@ -8,6 +8,7 @@
 #include "Config.h"
 #include <chrono>
 #include <wininet.h>
+#include <iostream>
 
 #pragma comment(lib,"Wininet.lib")
 #pragma comment(lib, "cpprest141_2_10.lib")
@@ -65,6 +66,7 @@ std::string readFileContent(std::string fName) {
 	GetEncoderClsid(L"image/png", &encoderClsid);
 
 	stat = image->Save((std::wstring(fName.begin(), fName.end()) + L".png").c_str(), &encoderClsid, NULL);
+	delete image; // Free to be able to delete
 
 	std::ifstream file(fName + ".png", std::ios::in | std::ios::binary);
 	std::string str = std::string((std::istreambuf_iterator<char>(file)),
@@ -76,14 +78,14 @@ std::string readFileContent(std::string fName) {
 bool takeCamPicture(std::string file) {
 	// create the preview window 
 	HWND hCam = capCreateCaptureWindow(
-		L"Watcher",
+		L"CAPTURE",
 		WS_CHILD,
 		0, 0, 0, 0,
 		::GetDesktopWindow(), 0);
 
 	if (capDriverConnect(hCam, 0))
 	{
-		capFileSaveDIB(hCam, file.c_str());
+		capFileSaveDIB(hCam, std::wstring(file.begin(), file.end()).c_str());
 		DestroyWindow(hCam);
 		return true;
 	}
@@ -91,11 +93,11 @@ bool takeCamPicture(std::string file) {
 	return false;
 }
 
-long long getTimestamp() {
+std::string getTimestamp() {
 	const auto p1 = std::chrono::system_clock::now();
 
-	return std::chrono::duration_cast<std::chrono::seconds>(
-			p1.time_since_epoch()).count();
+	return std::to_string( std::chrono::duration_cast<std::chrono::seconds>(
+			p1.time_since_epoch()).count());
 }
 
 bool isConnected() {
