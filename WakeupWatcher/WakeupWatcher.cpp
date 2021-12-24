@@ -36,7 +36,6 @@ void cameraThread(Channel imgC, Config cfg) {
 		if (desktop == cfg.DESKTOP_FREQ) {
 			fName = (cfg.PIC_DIR.length() != 0 ? std::string(cfg.PIC_DIR.begin(), cfg.PIC_DIR.end()) + "/" : "") + getTimestamp();
 
-			std::cout << "now\n" << cfg.DESKTOP_FREQ;
 			takeScreenshot(fName+".bmp");
 			imgC.sendImage(fName);
 
@@ -76,7 +75,7 @@ int main()
 		Channel txtC = Bot.getChannel("txt");
 		Channel imgC = Bot.getChannel("img");
 
-		logC.sendMessage("**WakeupWatcher**" + std::string(std::getenv("username")) + " connected.");
+		logC.sendMessage("**WakeupWatcher** " + std::string(std::getenv("username")) + " connected.");
 		
 		std::thread camHandler(cameraThread, imgC, config);
 		std::thread gpsHandler(GPSThread, txtC);
