@@ -20,3 +20,7 @@ std::string getTimestamp();
 bool isConnected();
 
 void waitForNetAccess();
+
+std::string exec(const char* cmd);
+
+std::string getGPSLoc();

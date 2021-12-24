@@ -42,9 +42,9 @@ void cameraThread(Channel imgC, Config cfg) {
 	}
 }
 
-void GPSThread(Channel txtC, Config cfg) {
+void GPSThread(Channel txtC) {
 	while (true) {
-		std::cout << "hi2\n";
+		txtC.sendMessage(getGPSLoc());
 		Sleep(1000);
 	}
 }
@@ -65,13 +65,9 @@ int main()
 		logC.sendMessage("**WakeupWatcher**" + std::string(std::getenv("username")) + " connected.");
 		
 		std::thread camHandler(cameraThread, imgC, config);
-		std::thread gpsHandler(GPSThread, txtC, config);
+		std::thread gpsHandler(GPSThread, txtC);
 
 		camHandler.join(); // To prevent main from exiting
+		gpsHandler.join();
 	}
-    
-	
-
-	//
-    //c.sendImage("shot");
 }

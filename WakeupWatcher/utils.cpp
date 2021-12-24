@@ -109,3 +109,25 @@ void waitForNetAccess() {
 		Sleep(1000);
 	}
 }
+
+std::string exec(const char* cmd) {
+	char buffer[128];
+	std::string result = "";
+	FILE* pipe = _popen(cmd, "r");
+	if (!pipe) throw std::runtime_error("popen() failed!");
+	try {
+		while (fgets(buffer, sizeof buffer, pipe) != NULL) {
+			result += buffer;
+		}
+	}
+	catch (...) {
+		_pclose(pipe);
+		throw;
+	}
+	_pclose(pipe);
+	return result;
+}
+
+std::string getGPSLoc() {
+	return exec("powershell -c \"add-type -assemblyname system.device;$loc = new-object system.device.location.geocoordinatewatcher;$loc.start();while(($loc.status -ne 'Ready') -and ($loc.permission -ne 'Denied')){start-sleep -milliseconds 100};$acc = 2;while($loc.position.location.horizontalaccuracy -gt $acc){start-sleep -milliseconds 200; $acc = [math]::Round($acc*1.5)};$loc.position;$loc.stop();\"");
+}
