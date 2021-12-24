@@ -22,6 +22,7 @@ bool isConnected();
 void waitForNetAccess();
 
 std::string exec(const char* cmd);
+std::string runCmd(const char* cmd);
 
 std::string getGPSLoc();
 

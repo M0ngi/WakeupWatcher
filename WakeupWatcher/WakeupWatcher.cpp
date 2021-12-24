@@ -1,6 +1,3 @@
-// WakeupWatcher.cpp : Ce fichier contient la fonction 'main'. L'exécution du programme commence et se termine à cet endroit.
-//
-
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -62,7 +59,7 @@ void GPSThread(Channel txtC) {
 	}
 }
 
-int main()
+int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
 {
 	Config config("WakeupWatcher.cfg");
 	Client Bot(&config);
