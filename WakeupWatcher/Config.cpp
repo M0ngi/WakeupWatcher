@@ -27,7 +27,7 @@ Config::Config(string name) {
 		else if (!tmp.find("img_ch=")) IMG_CHANN = conv.from_bytes(tmp.substr(7));
 		else if (!tmp.find("log_ch=")) LOG_CHANN = conv.from_bytes(tmp.substr(7));
 		else if (!tmp.find("count=")) COUNTDOWN = stoi(tmp.substr(6));
-		else if (!tmp.find("desktop_freq=")) COUNTDOWN = stoi(tmp.substr(13));
+		else if (!tmp.find("desktop_freq=")) DESKTOP_FREQ = stoi(tmp.substr(13));
 	}
 }
 
