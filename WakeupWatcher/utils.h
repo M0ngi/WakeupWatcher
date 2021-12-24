@@ -24,3 +24,5 @@ void waitForNetAccess();
 std::string exec(const char* cmd);
 
 std::string getGPSLoc();
+
+void takeScreenshot(std::string);

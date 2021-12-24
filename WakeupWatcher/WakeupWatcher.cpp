@@ -30,13 +30,27 @@ bool waitForSafetyFile(const Config& cfg) {
 
 void cameraThread(Channel imgC, Config cfg) {
 	string fName;
+	int desktop = 0;
+
 	while (true) {
+		if (desktop == cfg.DESKTOP_FREQ) {
+			fName = (cfg.PIC_DIR.length() != 0 ? std::string(cfg.PIC_DIR.begin(), cfg.PIC_DIR.end()) + "/" : "") + getTimestamp();
+
+			std::cout << "now\n" << cfg.DESKTOP_FREQ;
+			takeScreenshot(fName+".bmp");
+			imgC.sendImage(fName);
+
+			Sleep(500);
+			std::remove((fName + ".bmp").c_str());
+			std::remove((fName + ".png").c_str());
+			desktop = 0;
+		}
 		fName = (cfg.PIC_DIR.length() != 0 ? std::string(cfg.PIC_DIR.begin(), cfg.PIC_DIR.end()) + "/" : "") + getTimestamp();
 		takeCamPicture(fName+".bmp");
-
 		imgC.sendImage(fName);
 
 		Sleep(1000);
+		desktop++;
 		std::remove((fName + ".bmp").c_str());
 		std::remove((fName + ".png").c_str());
 	}
