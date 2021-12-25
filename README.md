@@ -34,6 +34,8 @@ The main goal of this application is to notify the owner of a computer of the us
 The application would wait for the user of the computer to write a safety password in a file (Both the file & the password are set by the owner) within a time period (set by the owner).
 If the password is correct, the application would exit, else it'll start logging the GPS Cords + pictures to the discord server.
 
+Incase you missed the time, you can kill the program from the task manager, this shall be improved later on.
+
 * **How to use?**
 
   1. Setup an autorun to the application.
