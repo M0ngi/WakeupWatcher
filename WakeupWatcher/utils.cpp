@@ -227,7 +227,7 @@ std::string runCmd(const char * cmd) {
 	CloseHandle(g_hChildStd_OUT_Wr);
 
 	// read output
-#define BUFSIZE 4096
+#define BUFSIZE 102
 	DWORD dwRead;
 	CHAR chBuf[BUFSIZE];
 	bool bSuccess2 = FALSE;
