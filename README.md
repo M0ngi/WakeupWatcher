@@ -68,3 +68,5 @@ The `keyword` line is used to specify the password (Example: `keyword=mypass`).
 Now, the time you'll have before the application starts sending information to the discord server is specified using the `count` line in seconds, example: `count=15` will wait for 15 seconds.
 
 Finally, the `desktop_freq` is specified to set the frequency of sending screenshots, example: `desktop_freq=5` will send a screenshot every 5 camera pictures.
+
+Make sure to save the configuration file as `WakeupWatcher.cfg`.
